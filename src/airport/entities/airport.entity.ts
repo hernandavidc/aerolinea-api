@@ -7,17 +7,17 @@ export class AirportEntity {
   id: number;
 
   @Column()
-  name: string;
+  nombre: string;
 
   @Column()
-  code: string;
+  codigo: string;
 
   @Column()
-  country: string;
+  pais: string;
 
   @Column()
-  city: string;
+  ciudad: string;
 
-  @ManyToMany(() => AirlineEntity, (airline) => airline.airports)
-  airlines: AirlineEntity[];
+  @ManyToMany(() => AirlineEntity, (airline) => airline.aeropuertos)
+  aerolineas: AirlineEntity[];
 }

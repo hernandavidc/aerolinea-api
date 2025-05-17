@@ -13,18 +13,18 @@ export class AirlineEntity {
   id: number;
 
   @Column()
-  name: string;
+  nombre: string;
 
   @Column()
-  description: string;
+  descripcion: string;
 
   @Column()
-  foundationDate: Date;
+  fechaFundacion: Date;
 
   @Column()
   website: string;
 
-  @ManyToMany(() => AirportEntity, (airport) => airport.airlines)
+  @ManyToMany(() => AirportEntity, (airport) => airport.aerolineas)
   @JoinTable()
-  airports: AirportEntity[];
+  aeropuertos: AirportEntity[];
 }

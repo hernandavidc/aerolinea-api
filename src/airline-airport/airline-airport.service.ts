@@ -53,7 +53,7 @@ export class AirlineAirportService {
   ): Promise<AirportEntity> {
     const airline = await this.airlineService.findOne(airlineId);
 
-    const airport = airline.aeropuertos.find((a) => a.id === airportId);
+    const airport = airline.aeropuertos.find((a) => a.id === Number(airportId));
     if (!airport) {
       throw new NotFoundException(
         `Aeropuerto con ID ${airportId} no encontrado en aerolínea con ID ${airlineId}`,
@@ -90,7 +90,7 @@ export class AirlineAirportService {
     const airline = await this.airlineService.findOne(airlineId);
 
     const airportIndex = airline.aeropuertos.findIndex(
-      (a) => a.id === airportId,
+      (a) => a.id === Number(airportId),
     );
     if (airportIndex === -1) {
       throw new NotFoundException(

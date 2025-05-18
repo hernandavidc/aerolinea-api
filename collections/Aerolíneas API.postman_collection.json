@@ -1,0 +1,808 @@
+{
+	"info": {
+		"_postman_id": "c4d2ab38-0665-4af8-b26b-8911799ed04a",
+		"name": "Aerolíneas API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13208445",
+		"_collection_link": "https://galactic-capsule-121781.postman.co/workspace/Jobgether-postman~994719c2-4d2e-46df-a601-d03be24a9db3/collection/13208445-c4d2ab38-0665-4af8-b26b-8911799ed04a?action=share&source=collection_link&creator=13208445"
+	},
+	"item": [
+		{
+			"name": "Aerolíneas",
+			"item": [
+				{
+					"name": "1. Crear Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Estado 201 - Aerolínea creada correctamente\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (jsonData && jsonData.id) {",
+									"    pm.collectionVariables.set(\"airlineId\", jsonData.id);",
+									"    console.log(\"ID de aerolínea guardado: \" + jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Avianca\",\n  \"descripcion\": \"Aerolínea colombiana\",\n  \"fechaFundacion\": \"1919-12-05T00:00:00.000Z\",\n  \"website\": \"https://www.avianca.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airlines",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines"
+							]
+						},
+						"description": "Crear una nueva aerolínea"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Obtener Todas las Aerolíneas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Listado de aerolíneas obtenido\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines"
+							]
+						},
+						"description": "Obtener todas las aerolíneas"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Obtener Aerolínea por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aerolínea encontrada\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.collectionVariables.get(\"airlineId\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{airlineId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{airlineId}}"
+							]
+						},
+						"description": "Obtener una aerolínea específica por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Actualizar Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aerolínea actualizada\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.nombre).to.eql(\"Avianca Actualizada\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Avianca Actualizada\",\n  \"descripcion\": \"Descripción actualizada\",\n  \"website\": \"https://www.avianca.com/actualizada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{airlineId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{airlineId}}"
+							]
+						},
+						"description": "Actualizar una aerolínea existente"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Eliminar Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 204 - Aerolínea eliminada\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{airlineId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{airlineId}}"
+							]
+						},
+						"description": "Eliminar una aerolínea"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Aeropuertos",
+			"item": [
+				{
+					"name": "1. Crear Aeropuerto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Estado 201 - Aeropuerto creado correctamente\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (jsonData && jsonData.id) {",
+									"    pm.collectionVariables.set(\"airportId\", jsonData.id);",
+									"    console.log(\"ID de aeropuerto guardado: \" + jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Aeropuerto Internacional El Dorado\",\n  \"codigo\": \"BOG\",\n  \"pais\": \"Colombia\",\n  \"ciudad\": \"Bogotá\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports"
+							]
+						},
+						"description": "Crear un nuevo aeropuerto"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Obtener Todos los Aeropuertos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Listado de aeropuertos obtenido\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports"
+							]
+						},
+						"description": "Obtener todos los aeropuertos"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Obtener Aeropuerto por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aeropuerto encontrado\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.collectionVariables.get(\"airportId\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airports/{{airportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"{{airportId}}"
+							]
+						},
+						"description": "Obtener un aeropuerto específico por ID"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Actualizar Aeropuerto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aeropuerto actualizado\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.nombre).to.eql(\"Aeropuerto Internacional El Dorado Actualizado\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Aeropuerto Internacional El Dorado Actualizado\",\n  \"ciudad\": \"Bogotá D.C.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airports/{{airportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"{{airportId}}"
+							]
+						},
+						"description": "Actualizar un aeropuerto existente"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Eliminar Aeropuerto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 204 - Aeropuerto eliminado\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airports/{{airportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports",
+								"{{airportId}}"
+							]
+						},
+						"description": "Eliminar un aeropuerto"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Asociación Aerolínea-Aeropuerto",
+			"item": [
+				{
+					"name": "0. Crear Datos de Prueba",
+					"item": [
+						{
+							"name": "Crear Aerolínea para Prueba",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.test(\"Estado 201 - Aerolínea de prueba creada\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"if (jsonData && jsonData.id) {",
+											"    pm.collectionVariables.set(\"testAirlineId\", jsonData.id);",
+											"    console.log(\"ID de aerolínea de prueba guardado: \" + jsonData.id);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nombre\": \"LATAM Airlines\",\n  \"descripcion\": \"Aerolínea latinoamericana\",\n  \"fechaFundacion\": \"2010-05-05T00:00:00.000Z\",\n  \"website\": \"https://www.latam.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/airlines",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"airlines"
+									]
+								},
+								"description": "Crear una aerolínea para pruebas de asociación"
+							},
+							"response": []
+						},
+						{
+							"name": "Crear Aeropuerto para Prueba",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();",
+											"pm.test(\"Estado 201 - Aeropuerto de prueba creado\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"if (jsonData && jsonData.id) {",
+											"    pm.collectionVariables.set(\"testAirportId\", jsonData.id);",
+											"    console.log(\"ID de aeropuerto de prueba guardado: \" + jsonData.id);",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nombre\": \"Aeropuerto Internacional Jorge Chávez\",\n  \"codigo\": \"LIM\",\n  \"pais\": \"Perú\",\n  \"ciudad\": \"Lima\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/airports",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"airports"
+									]
+								},
+								"description": "Crear un aeropuerto para pruebas de asociación"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "1. Añadir Aeropuerto a Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 201 - Aeropuerto añadido a aerolínea\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.aeropuertos).to.be.an('array');",
+									"    pm.expect(jsonData.aeropuertos.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{testAirlineId}}/airports/{{testAirportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{testAirlineId}}",
+								"airports",
+								"{{testAirportId}}"
+							]
+						},
+						"description": "Asociar un aeropuerto a una aerolínea"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Obtener Todos los Aeropuertos de una Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aeropuertos de aerolínea obtenidos\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"    pm.expect(jsonData.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{testAirlineId}}/airports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{testAirlineId}}",
+								"airports"
+							]
+						},
+						"description": "Obtener todos los aeropuertos asociados a una aerolínea específica"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Obtener Aeropuerto Específico de una Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aeropuerto específico de aerolínea obtenido\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.id).to.eql(Number(pm.collectionVariables.get(\"testAirportId\")));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{testAirlineId}}/airports/{{testAirportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{testAirlineId}}",
+								"airports",
+								"{{testAirportId}}"
+							]
+						},
+						"description": "Obtener un aeropuerto específico asociado a una aerolínea específica"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Crear Segundo Aeropuerto para Actualización",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.test(\"Estado 201 - Segundo aeropuerto creado\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"if (jsonData && jsonData.id) {",
+									"    pm.collectionVariables.set(\"testAirportId2\", jsonData.id);",
+									"    console.log(\"ID del segundo aeropuerto guardado: \" + jsonData.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Aeropuerto Internacional de Santiago\",\n  \"codigo\": \"SCL\",\n  \"pais\": \"Chile\",\n  \"ciudad\": \"Santiago\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airports"
+							]
+						},
+						"description": "Crear un segundo aeropuerto para pruebas de actualización"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Actualizar Aeropuertos de una Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 200 - Aeropuertos de aerolínea actualizados\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    pm.response.to.be.json;",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('object');",
+									"    pm.expect(jsonData.aeropuertos).to.be.an('array');",
+									"    pm.expect(jsonData.aeropuertos.length).to.equal(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{{testAirportId}}, {{testAirportId2}}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{testAirlineId}}/airports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{testAirlineId}}",
+								"airports"
+							]
+						},
+						"description": "Actualizar todos los aeropuertos asociados a una aerolínea específica"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Eliminar Aeropuerto de una Aerolínea",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Estado 204 - Aeropuerto eliminado de aerolínea\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/airlines/{{testAirlineId}}/airports/{{testAirportId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"airlines",
+								"{{testAirlineId}}",
+								"airports",
+								"{{testAirportId}}"
+							]
+						},
+						"description": "Eliminar la asociación de un aeropuerto con una aerolínea"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "airlineId",
+			"value": ""
+		},
+		{
+			"key": "airportId",
+			"value": ""
+		},
+		{
+			"key": "testAirlineId",
+			"value": ""
+		},
+		{
+			"key": "testAirportId",
+			"value": ""
+		},
+		{
+			"key": "testAirportId2",
+			"value": ""
+		}
+	]
+}
